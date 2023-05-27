@@ -11,11 +11,11 @@ import datetime                                                 # DateTime Libra
 import logging                                                  # Logging Library
 
 # Define Variables
-user_id = ""
-account_id = ""
-project_name = ""
-task_name = ""
-access_token = ""
+user_id = "YOUR_USER_ID"
+account_id = "YOUR_ACCOUNT_ID"
+project_name = "PROJECT_NAME"
+task_name = "TASK_NAME"
+access_token = "YOUR_ACCESS_TOKEN"
 base_url = f"https://api.harvestapp.com/v2/"
 headers = {
     "Harvest-Account-ID": account_id,
@@ -73,7 +73,7 @@ def calculate_remaining_time(user_id):
     return remaining_time_left
 
 # Function to Log Remaining Time
-def create_time_entry(user_id, project_id, task_id, hours):
+def create_time_entry(user_id, project_id, task_id, hours, current_date):
     url = f"{base_url}/time_entries"
     today = datetime.date.today().isoformat()
     data = {
@@ -85,19 +85,16 @@ def create_time_entry(user_id, project_id, task_id, hours):
     }
     response = requests.post(url, headers=headers, json=data)
     if response.status_code == 201:
-        print("Time entry created successfully.")
+        logging.info("[%s] Time entry created successfully.", current_date)
     else:
-        print("Failed to create time entry.")
+        logging.error("[%s] Failed to create time entry.", current_date)
 
 # Main
 def main():
-
-    
-    # Get the Total Time logged Today and Calculate the Ramining Time (Based on a 7.5 hour working Day)
+    # Get the Total Time logged Today and Calculate the Remaining Time (Based on a 7.5 hour working Day)
     total_time_logged = get_total_time_logged(user_id)
     remaining_time = calculate_remaining_time(user_id)
-    #print("API Response:", response.json())
-
+    
     # Get the Project and Task ID
     project_id = get_project_id(project_name)
     task_id = get_task_id(task_name)
@@ -109,8 +106,7 @@ def main():
 
     if remaining_time > 0:
         if project_id and task_id:
-            create_time_entry(user_id, project_id, task_id, remaining_time)
-            logging.info("[%s] Time entry created successfully.", current_date)
+            create_time_entry(user_id, project_id, task_id, remaining_time, current_date)
         else:
             if not project_id:
                 logging.error("[%s] Cannot log time. Project '%s' not found.", current_date, project_name)
@@ -119,6 +115,6 @@ def main():
     else:
         logging.info("[%s] Nothing to log. Remaining time is 0.", current_date)
 
-    
 if __name__ == "__main__":
+    logging.basicConfig(filename='time_log.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
     main()
