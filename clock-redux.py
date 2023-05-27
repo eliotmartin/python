@@ -246,7 +246,7 @@ def drawProgressBar(offscreen_canvas_clock,progressBarComputed, progressBarXOrig
 # Main
 def main():
     clearTerminal()
-    print ("The clock is running...")
+    print ("The clock is running!")
 
     # Do the intial time capture
     hour, minute, second, hourFirst, hourSecond, minuteFirst, minuteSecond, secondFirst, secondSecond, second = processLocalTime()
