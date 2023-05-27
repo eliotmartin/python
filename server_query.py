@@ -60,7 +60,7 @@ def main():
     print ("Querying server every 60 seconds...")
 
     # Configuration for DayZ server query
-    serverAddress = ("217.182.197.233", 2669)
+    serverAddress = ("SERVER_IP", 2669)
 
     # Do the intial time capture
     hour, minute, second, hourFirst, hourSecond, minuteFirst, minuteSecond, secondFirst, secondSecond, second = processLocalTime()
